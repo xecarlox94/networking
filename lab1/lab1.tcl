@@ -32,7 +32,7 @@ set n3 [$ns node]
 set n4 [$ns node]
 
 # Create links between the nodes, bandwidth, speed and type of buffer
-$ns duplex-link $n0 $n2 2Mb 10ms RED
+$ns duplex-link $n0 $n2 1.5Mb 10ms RED
 $ns duplex-link $n1 $n2 2Mb 10ms DropTail
 $ns duplex-link $n2 $n3 2Mb 10ms RED
 $ns duplex-link $n0 $n4 2Mb 10ms DropTail
@@ -42,6 +42,7 @@ $ns duplex-link $n1 $n4 2Mb 10ms DropTail
 # setting queue size between link (n2-n3) to 10
 $ns queue-limit $n2 $n3 7
 $ns queue-limit $n3 $n2 7
+$ns queue-limit $n2 $n0 1
 
 
 # node position (For NAM)
@@ -60,7 +61,7 @@ set tcp [new Agent/TCP]
 $tcp set class_ 2
 
 # set node as a TCP sender
-$ns attach-agent $n3 $tcp
+$ns attach-agent $n2 $tcp
 
 # set TCP receiver agent
 set sink [new Agent/TCPSink]
@@ -107,7 +108,7 @@ $ns at 1.0 "$cbr stop"
 
 
 # detach tcp and sink agents
-$ns at 1.0 "$ns detach-agent $n3 $tcp ; $ns detach-agent $n4 $sink"
+$ns at 1.0 "$ns detach-agent $n2 $tcp ; $ns detach-agent $n4 $sink"
 
 # finish procedure 
 $ns at 1.1 "finish"
