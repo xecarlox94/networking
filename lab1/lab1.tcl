@@ -29,27 +29,32 @@ set n0 [$ns node]
 set n1 [$ns node]
 set n2 [$ns node]
 set n3 [$ns node]
+set n4 [$ns node]
 
 # Create links between the nodes, bandwidth, speed and type of buffer
 $ns duplex-link $n0 $n2 2Mb 10ms DropTail
 $ns duplex-link $n1 $n2 2Mb 10ms DropTail
-$ns duplex-link $n2 $n3 1.7Mb 20ms DropTail
+$ns duplex-link $n2 $n3 1.5Mb 10ms RED
+$ns duplex-link $n0 $n4 2Mb 10ms RED
+$ns duplex-link $n1 $n4 2Mb 10ms DropTail
 
 
 # setting queue size between link (n2-n3) to 10
-$ns queue-limit $n2 $n3 10
+$ns queue-limit $n2 $n3 5
 
 
 # node position (For NAM)
 $ns duplex-link-op $n0 $n2 orient right-down
 $ns duplex-link-op $n1 $n2 orient right-up
 $ns duplex-link-op $n2 $n3 orient right
+$ns duplex-link-op $n0 $n4 orient left-down
+$ns duplex-link-op $n1 $n4 orient left-up
 
 # monitor queue for link (n2-n3), (for NAM)
 $ns duplex-link-op $n2 $n3 queuePos 0.5
 
 
-# setup a TCP agent
+# setup a tcp agent
 set tcp [new Agent/TCP]
 $tcp set class_ 2
 
@@ -88,23 +93,23 @@ $udp set fid_ 2
 set cbr [new Application/Traffic/CBR]
 $cbr attach-agent $udp
 $cbr set type_ CBR
-$cbr set packet_size_ 1000
+$cbr set packet_size_ 3000
 $cbr set rate_ 1mb
-$cbr set random_ false
+$cbr set random_ true
 
 
 # schedule events for CBR and FTP agents
-$ns at 0.1 "$cbr start"
-$ns at 1.0 "$ftp start"
-$ns at 4.0 "$ftp stop"
-$ns at 4.5 "$cbr stop"
+$ns at 0.0 "$cbr start"
+$ns at 0.1 "$ftp start"
+$ns at 1.0 "$ftp stop"
+$ns at 1.0 "$cbr stop"
 
 
 # detach tcp and sink agents
-$ns at 4.5 "$ns detach-agent $n0 $tcp ; $ns detach-agent $n3 $sink"
+$ns at 1.0 "$ns detach-agent $n0 $tcp ; $ns detach-agent $n3 $sink"
 
 # finish procedure 
-$ns at 5.0 "finish"
+$ns at 1.1 "finish"
 
 # print CBR packet size and interval
 puts "CBR packet size = [$cbr set packet_size_ ]"
