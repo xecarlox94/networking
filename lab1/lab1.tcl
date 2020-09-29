@@ -32,17 +32,16 @@ set n3 [$ns node]
 set n4 [$ns node]
 
 # Create links between the nodes, bandwidth, speed and type of buffer
-$ns duplex-link $n0 $n2 1.5Mb 10ms RED
+$ns duplex-link $n0 $n2 1.5Mb 10ms DropTail
 $ns duplex-link $n1 $n2 2Mb 10ms DropTail
-$ns duplex-link $n2 $n3 2Mb 10ms RED
+$ns duplex-link $n2 $n3 2Mb 10ms DropTail
 $ns duplex-link $n0 $n4 2Mb 10ms DropTail
 $ns duplex-link $n1 $n4 2Mb 10ms DropTail
 
 
 # setting queue size between link (n2-n3) to 10
-$ns queue-limit $n2 $n3 7
 $ns queue-limit $n3 $n2 7
-$ns queue-limit $n2 $n0 1
+$ns queue-limit $n2 $n0 7
 
 
 # node position (For NAM)
