@@ -3,6 +3,7 @@ set ns [new Simulator]
 $ns color 1 Red
 $ns color 2 Blue
 $ns color 3 Green
+$ns color 4 Purple
 
 
 set nf [open out.nam w]
@@ -63,6 +64,20 @@ $ftp1 set type_ FTP
 
 
 
+set tcp2 [new Agent/TCP]
+$tcp2 set class_ 2
+$ns attach-agent $n4 $tcp2
+
+set sink2 [new Agent/TCPSink]
+$ns attach-agent $n0 $sink2
+$ns connect $tcp2 $sink2
+$tcp2 set fid_ 4
+
+set ftp2 [new Application/FTP]
+$ftp2 attach-agent $tcp2
+$ftp2 set type_ FTP
+
+
 
 
 set udp1 [new Agent/UDP]
@@ -101,14 +116,24 @@ $cbr2 set rate_ 1mb
 $cbr2 set random_ false
 
 
-$ns at 0.0 "$ftp1 start"
-$ns at 1.0 "$ftp1 stop"
-$ns at 0.3 "$cbr2 start"
-$ns at 0.9 "$cbr2 stop"
-$ns at 0.1 "$cbr1 start"
-$ns at 0.7 "$cbr1 stop"
+$ns at 3.0 "$cbr1 start"
+$ns at 4.0 "$cbr1 stop"
+$ns at 4.5 "$cbr1 start"
+$ns at 6.0 "$cbr1 stop"
+$ns at 7.5 "$cbr1 start"
+$ns at 9.0 "$cbr1 stop"
 
+$ns at 0.8 "$cbr2 start"
+$ns at 1.5 "$cbr2 stop"
+$ns at 2.3 "$cbr2 start"
+$ns at 7.2 "$cbr2 stop"
 
-$ns at 1.5 "finish"
+$ns at 0.5 "$ftp2 start"
+$ns at 5.0 "$ftp2 stop"
+
+$ns at 1.0 "$ftp1 start"
+$ns at 8.0 "$ftp1 stop"
+
+$ns at 10.0 "finish"
 
 $ns run
