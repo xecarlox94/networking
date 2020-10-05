@@ -42,8 +42,9 @@ $ns duplex-link-op $n2 $n1 orient left-down
 $ns duplex-link-op $n3 $n2 orient left
 
 
+$ns queue-limit $n2 $n3 10
 
-
+$ns duplex-link-op $n2 $n3 queuePos 0.5
 
 
 
@@ -54,7 +55,7 @@ $ns attach-agent $n0 $tcp1
 set sink1 [new Agent/TCPSink]
 $ns attach-agent $n3 $sink1
 $ns connect $tcp1 $sink1
-$tcp1 set fid_ 1
+$tcp1 set fid_ 2
 
 set ftp1 [new Application/FTP]
 $ftp1 attach-agent $tcp1
@@ -69,8 +70,9 @@ $ns attach-agent $n3 $udp1
 
 set null1 [new Agent/Null]
 $ns attach-agent $n4 $null1
+
 $ns connect $udp1 $null1
-$udp1 set fid_ 2
+$udp1 set fid_ 3
 
 set cbr1 [new Application/Traffic/CBR]
 $cbr1 attach-agent $udp1
@@ -82,9 +84,27 @@ $cbr1 set random_ false
 
 
 
+set udp2 [new Agent/UDP]
+$ns attach-agent $n1 $udp2
+
+set null2 [new Agent/Null]
+$ns attach-agent $n3 $null2
+
+$ns connect $udp2 $null2
+$udp2 set fid_ 1
+
+set cbr2 [new Application/Traffic/CBR]
+$cbr2 attach-agent $udp2
+$cbr2 set type_ CBR
+$cbr2 set packet_size_ 1000
+$cbr2 set rate_ 1mb
+$cbr2 set random_ false
+
 
 $ns at 0.0 "$ftp1 start"
 $ns at 1.0 "$ftp1 stop"
+$ns at 0.3 "$cbr2 start"
+$ns at 0.9 "$cbr2 stop"
 $ns at 0.1 "$cbr1 start"
 $ns at 0.7 "$cbr1 stop"
 
