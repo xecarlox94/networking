@@ -37,15 +37,19 @@ $ns duplex-link-op $Router1 $Router2 orient up-right
 $ns duplex-link-op $Router2 $Router3 orient down-right
 $ns duplex-link-op $Router3 $Router4 orient right
 $ns duplex-link-op $Router4 $Endserver1 orient up
+
+
 #------------Labeling----------------#
 $ns at 0.0 "$Client1 label Client1"
 $ns at 0.0 "$Client2 label Client2"
 $ns at 0.0 "$Client3 label Client3"
 $ns at 0.0 "$Router1 label Router1"
+
 $ns at 0.0 "$Router2 label Router2"
 $ns at 0.0 "$Router3 label Router3"
 $ns at 0.0 "$Router4 label Router4"
 $ns at 0.0 "$Endserver1 label Endserver1"
+
 #-----------Configuring nodes------------#
 #$Endserver1 shape hexagon
 #$Router1 shape square
@@ -60,15 +64,15 @@ $ns duplex-link-op $Router1 $Router2 queuePos 0.1
 $ns duplex-link-op $Router2 $Router3 queuePos 0.5
 $ns duplex-link-op $Router3 $Router4 queuePos 0.1
 $ns duplex-link-op $Router4 $Endserver1 queuePos 0.5
+
 #---------finish procedure--------#
 proc finish {} {
- global ns nf nt
- puts "running nam..."
- exec nam tcp3.nam &
- exit 0
- }
+    global ns nf nt
+    puts "running nam..."
+    exec nam tcp3.nam &
+    exit 0
+}
+
 #Calling finish procedure
 $ns at 35.0 "finish"
 $ns run
-#-----How to run-------------#
-$ns tcp3.tcl
