@@ -1,157 +1,69 @@
 #-------Event scheduler object creation--------#
 set ns [ new Simulator ]
+
 #----------creating nam objects----------------#
 set nf [open RandomTx.nam w]
 $ns namtrace-all $nf
+
 #Open the trace file
 set nt [open RandomTx.tr w]
 $ns trace-all $nt
 set proto rlm
+
 #------------COLOR DESCRIPTION---------------#
-$ns
-$ns
-$ns
-$ns
-$ns
-$ns
-$ns
-$ns
-$ns
-color
-color
-color
-color
-color
-color
-color
-color
-color
-1
-2
-3
-4
-5
-6
-7
-8
-9
-dodgerblue
-red
-cyan
-green
-yellow
-black
-magenta
-gold
-red
+$ns color 1 dodgerblue
+$ns color 2 red
+$ns color 3 cyan
+$ns color 4 green
+$ns color 5 yellow
+$ns color 6 black
+$ns color 7 magenta
+$ns color 8 gold
+$ns color 9 red
+
+
 # --------- CREATING SENDER - RECEIVER - ROUTER NODES-----------#
-set
-set
-set
-set
-set
-set
-set
-set
-set
-set
-set
-C(1) [$ns node]
-C(2) [$ns node]
-C(3) [$ns node]
-C(4) [$ns node]
-R(1) [$ns node]
-R(2) [$ns node]
-R(3) [$ns node]
-R(4) [$ns node]
-ROU(1) [$ns node]
-ROU(2) [$ns node]
-ROU(3) [$ns node]
+set C(1) [$ns node]
+set C(2) [$ns node]
+set C(3) [$ns node]
+set C(4) [$ns node]
+set R(1) [$ns node]
+set R(2) [$ns node]
+set R(3) [$ns node]
+set R(4) [$ns node]
+set ROU(1) [$ns node]
+set ROU(2) [$ns node]
+set ROU(3) [$ns node]
+
 # --------------CREATING DUPLEX LINK -----------------------#
-$ns duplex-link $C(1) $ROU(1)
-$ns duplex-link $C(2) $ROU(1)
-$ns duplex-link $C(3) $ROU(1)
-1Mb 10ms DropTail
-500Kb 10ms DropTail
-750Kb 10ms DropTail$ns
-$ns
-$ns
-$ns
-$ns
-duplex-link
-duplex-link
-duplex-link
-duplex-link
-duplex-link
-$C(4)
-$R(1)
-$R(2)
-$R(3)
-$R(4)
-$ROU(2)
-$ROU(1)
-$ROU(1)
-$ROU(1)
-$ROU(3)
-1Mb
-1Mb
-1Mb
-1Mb
-1Mb
-$ns duplex-link $ROU(2) $ROU(1)
-$ns duplex-link $ROU(2) $ROU(3)
-$ns duplex-link $ROU(1) $ROU(3)
-10ms
-10ms
-10ms
-10ms
-10ms
-DropTail
-DropTail
-DropTail
-DropTail
-DropTail
-1Mb 10ms DropTail
-1Mb 10ms DropTail
-1Mb 10ms DropTail
+$ns duplex-link $C(1) $ROU(1) 1Mb 10ms DropTail
+$ns duplex-link $C(2) $ROU(1) 500Kb 10ms DropTail
+$ns duplex-link $C(3) $ROU(1) 750Kb 10ms DropTail
+$ns duplex-link $C(4) $ROU(2) 1Mb 10ms DropTail
+$ns duplex-link $R(1) $ROU(1) 1Mb 10ms DropTail
+$ns duplex-link $R(2) $ROU(1) 1Mb 10ms DropTail
+$ns duplex-link $R(3) $ROU(1) 1Mb 10ms DropTail
+$ns duplex-link $R(4) $ROU(3) 1Mb 10ms DropTail
+$ns duplex-link $ROU(2) $ROU(1) 1Mb 10ms DropTail
+$ns duplex-link $ROU(2) $ROU(3) 1Mb 10ms DropTail
+$ns duplex-link $ROU(1) $ROU(3) 1Mb 10ms DropTail
+
 #-------------QUEUE SIZE DESCRIPTION---------------#
-$ns
-$ns
-$ns
-$ns
-queue-limit
-queue-limit
-queue-limit
-queue-limit
-$ROU(1)
-$ROU(1)
-$ROU(2)
-$ROU(3)
-$ROU(2)
-$ROU(3)
-$ROU(1)
-$ROU(1)
-18
-18
-20
-20
+$ns queue-limit $ROU(1) $ROU(2) 18
+$ns queue-limit $ROU(1) $ROU(3) 18
+$ns queue-limit $ROU(2) $ROU(1) 20
+$ns queue-limit $ROU(3) $ROU(1) 20
+
 #-----------CREATING ORIENTATION -------------------------#
-$ns
-$ns
-$ns
-$ns
-$ns
-$ns
-$ns
-$ns
-duplex-link-op
-duplex-link-op
-duplex-link-op
-duplex-link-op
-duplex-link-op
-duplex-link-op
-duplex-link-op
-duplex-link-op
+$ns duplex-link-op 
+$ns duplex-link-op 
+$ns duplex-link-op 
+$ns duplex-link-op 
+$ns duplex-link-op 
+$ns duplex-link-op 
+$ns duplex-link-op 
+$ns duplex-link-op 
+
 $C(1)
 $C(2)
 $C(3)
@@ -186,56 +98,26 @@ up-left
 down
 $ns duplex-link-op $ROU(1) $ROU(2) orient down-right
 $ns duplex-link-op $ROU(3) $ROU(2) orient down-right
+
 # --------------LABELLING -----------------------------#
-$ns
-$ns
-$ns
-$ns
-$ns
-$ns
-$ns
-$ns
-$ns
-$ns
-$ns
-at
-at
-at
-at
-at
-at
-at
-at
-at
-at
-at
-0.0
-0.0
-0.0
-0.0
-0.0
-0.0
-0.0
-0.0
-0.0
-0.0
-0.0
-"$C(1) label CL1"
-"$C(2) label CL2"
-"$C(3) label CL3"
-"$C(4) label CL4"
-"$R(1) label RC1"
-"$R(2) label RC2"
-"$R(3) label RC3"
-"$R(4) label RC4"
-"$ROU(1) label ROU1"
-"$ROU(2) label ROU2"
-"$ROU(3) label ROU3"
+$ns at 0.0 "$C(1) label CL1"
+$ns at 0.0 "$C(2) label CL2"
+$ns at 0.0 "$C(3) label CL3"
+$ns at 0.0 "$C(4) label CL4"
+$ns at 0.0 "$R(1) label RC1"
+$ns at 0.0 "$R(2) label RC2"
+$ns at 0.0 "$R(3) label RC3"
+$ns at 0.0 "$R(4) label RC4"
+$ns at 0.0 "$ROU(1) label ROU1"
+$ns at 0.0 "$ROU(2) label ROU2"
+$ns at 0.0 "$ROU(3) label ROU3"
+
 # --------------- CONFIGURING NODES -----------------#
 $ROU(1) shape square
 $ROU(2) shape square
 $ROU(3) shape square
-# ----------------QUEUES POSITIONING AND ESTABLISHMENT -------------#$ns duplex-link-op $ROU(2) $ROU(1) queuePos 0.1
+# ----------------QUEUES POSITIONING AND ESTABLISHMENT -------------#
+$ns duplex-link-op $ROU(2) $ROU(1) queuePos 0.1
 #$ns duplex-link-op $ROU(2) $C(5) queuePos 0.1
 $ns duplex-link-op $ROU(3) $ROU(1) queuePos 0.1
 #-----SETTING IDENTIFICATION COLORS TO ROUTER-LINKS---------------#

@@ -1,14 +1,16 @@
 # Create a simulator object
 set ns [new Simulator -multicast on]
-# Open the nam trace file, associated with nf, log everything as nam
-output in nf
+
+# Open the nam trace file, associated with nf, log everything as nam output in nf
 set nf [open out.nam w]
 $ns namtrace-all $nf
+
 set node_(n0) [$ns node]
 set node_(n1) [$ns node]
 set node_(n2) [$ns node]
 set node_(n3) [$ns node]
-set node_(n4) [$ns node]set node_(n5) [$ns node]
+set node_(n4) [$ns node]
+set node_(n5) [$ns node]
 set node_(n6) [$ns node]
 set node_(n7) [$ns node]
 set node_(n8) [$ns node]
@@ -29,12 +31,14 @@ set node_(n22) [$ns node]
 set node_(n23) [$ns node]
 set node_(n24) [$ns node]
 set node_(n25) [$ns node]
+
 #Create a duplex link between the nodes
 $ns duplex-link $node_(n0) $node_(n2) 3.0Mb 10ms DropTail
 $ns duplex-link $node_(n0) $node_(n1) 3.0Mb 10ms DropTail
 $ns duplex-link $node_(n1) $node_(n3) 2.0Mb 10ms DropTail
 $ns duplex-link $node_(n3) $node_(n4) 1.5Mb 10ms DropTail
-$ns duplex-link $node_(n3) $node_(n7) 1.5Mb 10ms DropTail$ns duplex-link $node_(n2) $node_(n5) 1.0Mb 10ms DropTail
+$ns duplex-link $node_(n3) $node_(n7) 1.5Mb 10ms DropTail
+$ns duplex-link $node_(n2) $node_(n5) 1.0Mb 10ms DropTail
 $ns duplex-link $node_(n2) $node_(n6) 1.5Mb 10ms DropTail
 $ns duplex-link $node_(n0) $node_(n3) 1.5Mb 10ms DropTail
 $ns duplex-link $node_(n8) $node_(n9) 2.0Mb 10ms DropTail
@@ -57,10 +61,12 @@ $ns duplex-link $node_(n24) $node_(n0) 3.0Mb 10ms DropTail
 $ns duplex-link $node_(n24) $node_(n8) 3.0Mb 10ms DropTail
 $ns duplex-link $node_(n25) $node_(n8) 3.0Mb 10ms DropTail
 $ns duplex-link $node_(n16) $node_(n25) 3.0Mb 10ms DropTail
+
 #setting orientation of links
 $ns duplex-link-op $node_(n0) $node_(n3) orient down
 $ns duplex-link-op $node_(n0) $node_(n1) orient left-down
-$ns duplex-link-op $node_(n0) $node_(n2) orient right-down$ns duplex-link-op $node_(n1) $node_(n3) orient right-down
+$ns duplex-link-op $node_(n0) $node_(n2) orient right-down
+$ns duplex-link-op $node_(n1) $node_(n3) orient right-down
 $ns duplex-link-op $node_(n3) $node_(n4) orient left-down
 $ns duplex-link-op $node_(n3) $node_(n7) orient right-down
 $ns duplex-link-op $node_(n2) $node_(n5) orient right-down
@@ -86,7 +92,8 @@ $ns duplex-link-op $node_(n24) $node_(n8) orient right-down
 $ns duplex-link-op $node_(n25) $node_(n8) orient left-down
 $ns duplex-link-op $node_(n25) $node_(n16) orient right-down
 $node_(n0) set X_ -57.6704
-$node_(n0) set Y_ 74.9762$node_(n0) set Z_ 0.0
+$node_(n0) set Y_ 74.9762
+$node_(n0) set Z_ 0.0
 $node_(n1) set X_ -74.9762
 $node_(n1) set Y_ 50.9936
 $node_(n1) set Z_ 0.0
@@ -112,7 +119,8 @@ $node_(n8) set X_ 39.0212
 $node_(n8) set Y_ 74.9762
 $node_(n8) set Z_ 0.0
 $node_(n9) set X_ 8.07317
-$node_(n9) set Y_ 50.9936$node_(n9) set Z_ 0.0
+$node_(n9) set Y_ 50.9936
+$node_(n9) set Z_ 0.0
 $node_(n10) set X_ 88.6017
 $node_(n10) set Y_ 50.9936
 $node_(n10) set Z_ 0.0
@@ -138,7 +146,8 @@ $node_(n17) set X_ 125.115
 $node_(n17) set Y_ 49.8054
 $node_(n17) set Z_ 0.0
 $node_(n18) set X_ 183.037
-$node_(n18) set Y_ 49.8054$node_(n18) set Z_ 0.0
+$node_(n18) set Y_ 49.8054
+$node_(n18) set Z_ 0.0
 $node_(n19) set X_ 152.962
 $node_(n19) set Y_ 50.868
 $node_(n19) set Z_ 0.0
@@ -160,11 +169,13 @@ $node_(n24) set Z_ 0.0
 $node_(n25) set X_ 100.00
 $node_(n25) set Y_ 100.9762
 $node_(n25) set Z_ 0.0
+
 $ns at 0.0 "$node_(n0) label S"
 $ns at 0.0 "$node_(n1) label N1"
 $ns at 0.0 "$node_(n2) label N3"
 $ns at 0.0 "$node_(n3) label N2"
-$ns at 0.0 "$node_(n4) label R1"$ns at 0.0 "$node_(n7) label R2"
+$ns at 0.0 "$node_(n4) label R1"
+$ns at 0.0 "$node_(n7) label R2"
 $ns at 0.0 "$node_(n5) label R3"
 $ns at 0.0 "$node_(n6) label R4"
 $ns at 0.0 "$node_(n8) label S"
@@ -186,15 +197,18 @@ $ns at 0.0 "$node_(n23) label R4"
 $ns at 0.0 "$node_(n24) label Overlay"
 $ns at 0.0 "$node_(n25) label Overlay"
 $ns color 1 blue
+
 # Define a 'finish' procedure
 proc finish {} {
-global ns nf
-$ns flush-trace
-#Close the trace fileclose $nf
-#Execute nam on the trace file
-exec nam out.nam &
-exit 0
+    global ns nf
+    $ns flush-trace
+    #Close the trace fileclose $nf
+    #Execute nam on the trace file
+    exec nam out.nam &
+    exit 0
 }
+
+
 #Call the finish procedure after 5 seconds of simulation time
 $ns at 5.0 "finish"
 # Run the simulation

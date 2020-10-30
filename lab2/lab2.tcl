@@ -7,7 +7,10 @@ $ns color 4 Purple
 
 
 set nf [open out.nam w]
+set tf [open out.tr w]
+
 $ns namtrace-all $nf
+$ns trace-all $tf
 
 proc finish {} {
     global ns nf

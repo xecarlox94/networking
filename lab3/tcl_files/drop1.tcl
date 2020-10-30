@@ -8,7 +8,7 @@ set nt [open drop1.tr w]
 $ns trace-all $nt
 set proto rlm
 $ns color 1 red
-$ns color 2 cgyan
+$ns color 2 cyan
 
 # --------- CREATING SENDER - RECEIVER - ROUTER NODES-----------#
 set Client1 [$ns node]

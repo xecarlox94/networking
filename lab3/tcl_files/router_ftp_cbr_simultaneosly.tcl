@@ -13,7 +13,8 @@ set n0 [$ns node]
 set n1 [$ns node]
 set n2 [$ns node]
 set n3 [$ns node]
-set n4 [$ns node]set n5 [$ns node]
+set n4 [$ns node]
+set n5 [$ns node]
 set n6 [$ns node]
 set n7 [$ns node]
 # Create links
@@ -39,7 +40,8 @@ $udp0 set dst_port_ 0
 set cbr1 [new Application/Traffic/CBR]
 $cbr1 attach-agent $udp0
 # Transport agent for the traffic source
-set udp1 [new Agent/UDP]$ns attach-agent $n1 $udp1
+set udp1 [new Agent/UDP]
+$ns attach-agent $n1 $udp1
 $udp1 set dst_addr_ $group2
 $udp1 set dst_port_ 0
 set cbr2 [new Application/Traffic/CBR]
@@ -65,7 +67,8 @@ $ns attach-agent $n7 $rcvr3
 $ns at 3.5 "$n7 join-group $rcvr6 $group2"
 $ns at 4.0 "$n5 leave-group $rcvr1 $group1"
 $ns at 4.5 "$n6 leave-group $rcvr2 $group1"
-$ns at 5.0 "$n7 leave-group $rcvr3 $group1"$ns at 5.5 "$n5 leave-group $rcvr4 $group2"
+$ns at 5.0 "$n7 leave-group $rcvr3 $group1"
+$ns at 5.5 "$n5 leave-group $rcvr4 $group2"
 $ns at 6.0 "$n6 leave-group $rcvr5 $group2"
 $ns at 6.5 "$n7 leave-group $rcvr6 $group2"
 # Schedule events

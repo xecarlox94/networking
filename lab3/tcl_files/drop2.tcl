@@ -49,7 +49,8 @@ $ns duplex-link-op $Client2 $Router2 queuePos 0.5
 $ns duplex-link-op $Router2 $Endserver1 queuePos 0.5
 
 # ----------------ESTABLISHING COMMUNICATION -------------#
-#--------------TCP CONNECTION BETWEEN NODES---------------#set tcp1 [$ns create-connection TCP $Client1 TCPSink $Endserver1 0]
+#--------------TCP CONNECTION BETWEEN NODES---------------#
+set tcp1 [$ns create-connection TCP $Client1 TCPSink $Endserver1 0]
 $tcp1 set fid_ 1
 set ftp1 [$tcp1 attach-app FTP]
 $ftp1 set packetSize_ 1000
