@@ -45,6 +45,7 @@ $ns duplex-link $ROU2 $ROU1 1Mb 10ms DropTail
 $ns duplex-link $ROU2 $ROU3 1Mb 10ms DropTail
 $ns duplex-link $ROU1 $ROU3 1Mb 10ms DropTail
 
+
 #-------------QUEUE SIZE DESCRIPTION---------------#
 $ns queue-limit $ROU1 $ROU2 18
 $ns queue-limit $ROU1 $ROU3 18
@@ -62,6 +63,7 @@ $ns duplex-link-op $R3 $ROU1 orient up-left
 $ns duplex-link-op $R4 $ROU3 orient down
 $ns duplex-link-op $ROU1 $ROU2 orient down-right
 $ns duplex-link-op $ROU3 $ROU2 orient down-right
+#$ns queue-limit $ $n1 15
 
 # --------------LABELLING -----------------------------#
 $ns at 0.0 "$C1 label CL1"
@@ -90,6 +92,50 @@ $ns duplex-link-op $ROU3 $ROU1 queuePos 0.1
 $ns duplex-link-op $ROU1 $ROU2 color cyan
 $ns duplex-link-op $ROU1 $ROU3 color cyan
 $ns duplex-link-op $ROU2 $ROU3 color cyan
+
+# ----------------ESTABLISHING COMMUNICATION -------------#
+#--------------TCP CONNECTION BETWEEN NODES---------------#
+#$tcp0 set fid_ 3
+#$Base1 set fid_ 3
+#$tcp0 set window_ 15
+#$ftp0 set packetSize_ 1000
+#$ftp0 set interval_ .05
+set tcp1 [$ns create-connection TCP $C1 TCPSink $R4 1]
+$tcp1 set class_ 1
+$tcp1 set maxcwnd_ 16
+$tcp1 set packetsize_ 4000
+$tcp1 set fid_ 1
+set ftp1 [$tcp1 attach-app FTP]
+$ftp1 set interval_ .005
+$ns at 0.2 "$ftp1 start"
+$ns at 4.0 "$ftp1 stop"
+set tcp2 [$ns create-connection TCP $C2 TCPSink $R3 1]
+$tcp2 set class_ 1
+$tcp2 set maxcwnd_ 16
+$tcp2 set packetsize_ 4000
+$tcp2 set fid_ 2
+set ftp2 [$tcp2 attach-app FTP]
+$ftp2 set interval_ .005
+$ns at 0.7 "$ftp2 start"
+$ns at 4.0 "$ftp2 stop"
+set tcp3 [$ns create-connection TCP $C3 TCPSink $R2 1]
+$tcp3 set class_ 1
+$tcp3 set maxcwnd_ 16
+$tcp3 set packetsize_ 4000
+$tcp3 set fid_ 3
+set ftp3 [$tcp3 attach-app FTP]
+$ftp3 set interval_ .005
+$ns at 1.2 "$ftp3 start"
+$ns at 4.0 "$ftp3 stop"
+set tcp4 [$ns create-connection TCP $C4 TCPSink $R1 1]
+$tcp4 set class_ 1
+$tcp4 set maxcwnd_ 16
+$tcp4 set packetsize_ 4000
+$tcp4 set fid_ 4
+set ftp4 [$tcp4 attach-app FTP]
+$ftp1 set interval_ .005
+$ns at 2.5 "$ftp4 start"
+$ns at 4.0 "$ftp4 stop"
 
 # ---------------- FINISH PROCEDURE -------------#
 proc finish {} {
