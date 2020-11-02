@@ -53,7 +53,8 @@ proc build_topology { ns } {
 
 }
 
-build_topology $ns
+
+ $ns
 
 Agent/TCP set nam_tracevar_ true
 
