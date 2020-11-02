@@ -48,6 +48,7 @@ $cbr set random_ false
 $ns at 0.5 "$cbr start"
 $ns at 4.5 "$cbr stop"
 
+
 $ns rtmodel-at 1.0 down $n(1) $n(2)
 $ns rtmodel-at 2.0 up $n(1) $n(2)
 
