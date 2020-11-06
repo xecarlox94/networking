@@ -1,6 +1,7 @@
 set ns [new Simulator]
 
 $ns color 1 red
+$ns color 2 red
 
 set nf [open top1.nam w]
 set tf [open top1.r w]
@@ -21,57 +22,79 @@ proc finish {} {
 }
 
 
+# seeting UDP communication
 
-for {set i 0} {$i < 10} {incr i} {
+
+set v 25
+set t 3.0
+
+
+
+for {set i 0} {$i < $v} {incr i} {
     set n($i) [$ns node]
 }
 
 
-for {set i 0} {$i < 10} {incr i} {
-    for {set j 0} {$j < 10} {incr j} {
-        $ns duplex-link $n($i) $n([expr ($i+1)%10]) 10Mb 50ms DropTail
-        $ns duplex-link $n($i) $n([expr ($i+2)%10]) 10Mb 50ms DropTail
+for {set i 0} {$i < $v} {incr i} {
+    for {set j 0} {$j < $v} {incr j} {
+        if {$i % 7 == 0 && $i != $j} {
+            $ns duplex-link $n($i) $n($j) 10Mb 50ms DropTail
+
+            set udp($i) [new Agent/UDP]
+
+            $ns attach-agent $n($i) $udp($i)
+
+            set null1 [new Agent/Null]
+            $ns attach-agent $n($j) $null1
+            $ns connect $udp($i) $null1
+            $udp($i) set fid_ 1
+
+
+            set cbr($i) [new Application/Traffic/CBR]
+            $cbr($i) attach-agent $udp($i)
+            $cbr($i) set type_ CBR
+            $cbr($i) set packet_size_ 1000
+            $cbr($i) set rate_ 1mb
+            $cbr($i) set random_ false
+
+
+            $ns at 0.0 "$cbr($i) start"
+            $ns at $t "$cbr($i) stop"
+        }
     }
 }
 
 
-# seeting UDP communication
-# set udp [new Agent/UDP]
-
-
-# proc set_cbr_connect {ubp} {
-
-#     $ns attach-agent $n(0) $udp
-
-#     set null [new Agent/Null]
-#     $ns attach-agent $n(3) $null
-#     $ns connect $udp $null
-#     $udp set fid_ 1
-
-
-#     set cbr [new Application/Traffic/CBR]
-#     $cbr attach-agent $udp
-#     $cbr set type_ CBR
-#     $cbr set packet_size_ 1000
-#     $cbr set rate_ 1mb
-#     $cbr set random_ false
-
-
-#     $ns at 0.5 "$cbr start"
-#     $ns at 4.5 "$cbr stop"
-
-# }
-
-
-# $ns rtmodel-at 1.0 down $n(1) $n(2)
-# $ns rtmodel-at 2.0 up $n(1) $n(2)
-
-
-# $ns rtproto LS
 
 
 
-$ns at 1.0 "finish"
+
+set tcp1 [new Agent/TCP]
+$tcp1 set class_ 2
+$ns attach-agent $n(2) $tcp1
+
+set sink1 [new Agent/TCPSink]
+$ns attach-agent $n(8) $sink1
+$ns connect $tcp1 $sink1
+$tcp1 set fid_ 2
+
+set ftp1 [new Application/FTP]
+$ftp1 attach-agent $tcp1
+$ftp1 set type_ FTP
+
+
+$ns at 0.0 "$ftp1 start"
+$ns at $t "$ftp1 stop"
+
+
+# $ns rtmodel-at 0.5 down $n(1) $n(2)
+# $ns rtmodel-at 1 up $n(1) $n(2)
+# $ns rtmodel-at 0.5 down $n(2) $n(3)
+# $ns rtmodel-at 1 up $n(2) $n(3)
+
+$ns rtproto DV
+
+$ns at $t "finish"
 
 
 $ns run
