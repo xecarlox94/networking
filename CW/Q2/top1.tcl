@@ -9,6 +9,10 @@ set tf [open top1.r w]
 $ns namtrace-all $nf
 $ns trace-all $tf
 
+
+
+$ns rtproto DV
+
 proc finish {} {
     global ns nf
 
@@ -25,121 +29,145 @@ proc finish {} {
 # seeting UDP communication
 
 
-set v 5
+set v 50
 set t 1.0
-
-
-set r1 [$ns node]
-set r2 [$ns node]
 
 
 
 for {set i 0} {$i < $v} {incr i} {
     set n1($i) [$ns node]
     set n2($i) [$ns node]
+    set n3($i) [$ns node]
+}
+
+for {set j 1} {$j < $v} {incr j} {
+
+    # network 1
+    $ns duplex-link $n1(0) $n1($j) 1Mb 15ms DropTail
+
+    set tcpa($j) [new Agent/TCP]
+    $tcpa($j) set class_ 2
+    $ns attach-agent $n1($j) $tcpa($j)
+
+    set sinka($j) [new Agent/TCPSink]
+    $ns attach-agent $n1(0) $sinka($j)
+    $ns connect $tcpa($j) $sinka($j)
+    $tcpa($j) set fid_ 2
+
+    set ftpa($j) [new Application/FTP]
+    $ftpa($j) attach-agent $tcpa($j)
+    $ftpa($j) set type_ FTP
+
+    $ns at 0.0 "$ftpa($j) start"
+    $ns at $t "$ftpa($j) stop"
+
+
+
+    set udpa($j) [new Agent/UDP]
+    $ns attach-agent $n1(0) $udpa($j)
+
+    set nulla($j) [new Agent/Null]
+    $ns attach-agent $n1($j) $nulla($j)
+
+    $ns connect $udpa($j) $nulla($j)
+    $udpa($j) set fid_ 1
+
+    set cbra($j) [new Application/Traffic/CBR]
+    $cbra($j) attach-agent $udpa($j)
+    $cbra($j) set type_ CBR
+    $cbra($j) set packet_size_ 1000
+    $cbra($j) set rate_ 1mb
+    $cbra($j) set random_ true
+
+    $ns at 0.0 "$cbra($j) start"
+    $ns at $t "$cbra($j) stop"
+
+
+    # network 2
+    $ns duplex-link $n2(0) $n2($j) 1Mb 15ms DropTail
+
+    set tcpb($j) [new Agent/TCP]
+    $tcpb($j) set class_ 2
+    $ns attach-agent $n2($j) $tcpb($j)
+
+    set sinkb($j) [new Agent/TCPSink]
+    $ns attach-agent $n2(0) $sinkb($j)
+    $ns connect $tcpb($j) $sinkb($j)
+    $tcpb($j) set fid_ 2
+
+    set ftpb($j) [new Application/FTP]
+    $ftpb($j) attach-agent $tcpb($j)
+    $ftpb($j) set type_ FTP
+
+    $ns at 0.0 "$ftpb($j) start"
+    $ns at $t "$ftpb($j) stop"
+
+
+
+    set udpb($j) [new Agent/UDP]
+    $ns attach-agent $n2(0) $udpb($j)
+
+    set nullb($j) [new Agent/Null]
+    $ns attach-agent $n2($j) $nullb($j)
+
+    $ns connect $udpb($j) $nullb($j)
+    $udpb($j) set fid_ 1
+
+    set cbrb($j) [new Application/Traffic/CBR]
+    $cbrb($j) attach-agent $udpb($j)
+    $cbrb($j) set type_ CBR
+    $cbrb($j) set packet_size_ 1000
+    $cbrb($j) set rate_ 1mb
+    $cbrb($j) set random_ true
+
+    $ns at 0.0 "$cbrb($j) start"
+    $ns at $t "$cbrb($j) stop"
+
+    # network 3
+
+
+    $ns duplex-link $n3(0) $n3($j) 1Mb 15ms DropTail
+
+    set tcpc($j) [new Agent/TCP]
+    $tcpc($j) set class_ 2
+    $ns attach-agent $n3($j) $tcpc($j)
+
+    set sinkc($j) [new Agent/TCPSink]
+    $ns attach-agent $n3(0) $sinkc($j)
+    $ns connect $tcpc($j) $sinkc($j)
+    $tcpc($j) set fid_ 2
+
+    set ftpc($j) [new Application/FTP]
+    $ftpc($j) attach-agent $tcpc($j)
+    $ftpc($j) set type_ FTP
+
+    $ns at 0.0 "$ftpc($j) start"
+    $ns at $t "$ftpc($j) stop"
+
+
+
+    set udpc($j) [new Agent/UDP]
+    $ns attach-agent $n3(0) $udpc($j)
+
+    set nullc($j) [new Agent/Null]
+    $ns attach-agent $n3($j) $nullc($j)
+
+    $ns connect $udpc($j) $nullc($j)
+    $udpc($j) set fid_ 1
+
+    set cbrc($j) [new Application/Traffic/CBR]
+    $cbrc($j) attach-agent $udpc($j)
+    $cbrc($j) set type_ CBR
+    $cbrc($j) set packet_size_ 1000
+    $cbrc($j) set rate_ 1mb
+    $cbrc($j) set random_ true
+
+    $ns at 0.0 "$cbrc($j) start"
+    $ns at $t "$cbrc($j) stop"
 }
 
 
-for {set j 0} {$j < $v} {incr j} {
-    
-    $ns duplex-link $r1 $n1($j) 10Mb 50ms DropTail
-    $ns duplex-link $r2 $n2($j) 10Mb 50ms DropTail
 
-
-
-
-    set tcp1($j) [new Agent/TCP]
-    $tcp1($j) set class_ 2
-    $ns attach-agent $n1($j) $tcp1($j)
-
-    set sink1($j) [new Agent/TCPSink]
-    $ns attach-agent $r1 $sink1($j)
-    $ns connect $tcp1($j) $sink1($j)
-    $tcp1($j) set fid_ 2
-
-    set ftp1($j) [new Application/FTP]
-    $ftp1($j) attach-agent $tcp1($j)
-    $ftp1($j) set type_ FTP
-
-    $ns at 0.0 "$ftp1($j) start"
-    $ns at $t "$ftp1($j) stop"
-
-
-
-    # set tcp2($j) [new Agent/TCP]
-    # $tcp2($j) set class_ 2
-    # $ns attach-agent $n2($j) $tcp2($j)
-
-    # set sink2($j) [new Agent/TCPSink]
-    # $ns attach-agent $n2($j) $sink2($j)
-    # $ns connect $tcp2($j) $sink2($j)
-    # $tcp2($j) set fid_ 2
-
-    # set ftp2($j) [new Application/FTP]
-    # $ftp2($j) attach-agent $tcp2($j)
-    # $ftp2($j) set type_ FTP
-    
-    # $ns at 0.0 "$ftp2($j) start"
-    # $ns at $t "$ftp2($j) stop"
-
-
-
-
-
-    # set udp1($i) [new Agent/UDP]
-
-    # $ns attach-agent $n1($i) $udp1($i)
-
-    # set null1($i) [new Agent/Null]
-    # $ns attach-agent $n1($j) $null1($i)
-    # $ns connect $udp1($i) $null1($i)
-    # $udp1($i) set fid_ 1
-
-
-    # set cbr1($i) [new Application/Traffic/CBR]
-    # $cbr1($i) attach-agent $udp1($i)
-    # $cbr1($i) set type_ CBR
-    # $cbr1($i) set packet_size_ 1000
-    # $cbr1($i) set rate_ 1mb
-    # $cbr1($i) set random_ true
-
-
-    # $ns at 0.0 "$cbr1($i) start"
-    # $ns at $t "$cbr1($i) stop"
-
-
-
-    # set udp2($i) [new Agent/UDP]
-
-    # $ns attach-agent $n2($i) $udp2($i)
-
-    # set null2($i) [new Agent/Null]
-    # $ns attach-agent $n2($j) $null2($i)
-    # $ns connect $udp2($i) $null2($i)
-    # $udp2($i) set fid_ 1
-
-
-    # set cbr2($i) [new Application/Traffic/CBR]
-    # $cbr2($i) attach-agent $udp2($i)
-    # $cbr2($i) set type_ CBR
-    # $cbr2($i) set packet_size_ 1000
-    # $cbr2($i) set rate_ 1mb
-    # $cbr2($i) set random_ true
-
-
-    # $ns at 0.0 "$cbr2($i) start"
-    # $ns at $t "$cbr2($i) stop"
-}
-
-
-
-
-
-
-
-$ns rtproto DV
-
-$ns at $t "finish"
-
+$ns at 10.0 "finish"
 
 $ns run
