@@ -251,11 +251,46 @@ $ns at 0.0 "$cbrr2 start"
 $ns at $t "$cbrr2 stop"
 
 
+$ns duplex-link $server $n3(0) 1Mb 10ms RED
+$ns duplex-link-op $server $n3(0) orient up
 
 
 
-# $ns duplex-link $server $n3(0) 1Mb 10ms RED
-# $ns duplex-link-op $server $n3(0) orient up
+set tcpr3 [new Agent/TCP]
+$tcpr3 set class_ 2
+$ns attach-agent $n3(0) $tcpr3
+
+set sinkr3 [new Agent/TCPSink]
+$ns attach-agent $server $sinkr3
+$ns connect $tcpr3 $sinkr3
+$tcpr3 set fid_ 2
+
+set ftpr3 [new Application/FTP]
+$ftpr3 attach-agent $tcpr3
+$ftpr3 set type_ FTP
+
+$ns at 0.0 "$ftpr3 start"
+$ns at $t "$ftpr3 stop"
+
+
+
+set udpr3 [new Agent/UDP]
+$ns attach-agent $server $udpr3
+
+set nullr3 [new Agent/Null]
+$ns attach-agent $n3(0) $nullr3
+$ns connect $udpr3 $nullr3
+$udpr3 set fid_ 1
+
+set cbrr3 [new Application/Traffic/CBR]
+$cbrr3 attach-agent $udpr3
+$cbrr3 set type_ CBR
+$cbrr3 set packet_size_ 1000
+$cbrr3 set rate_ 1mb
+$cbrr3 set random_ true
+
+$ns at 0.0 "$cbrr3 start"
+$ns at $t "$cbrr3 stop"
 
 
 $ns at $t "finish"
