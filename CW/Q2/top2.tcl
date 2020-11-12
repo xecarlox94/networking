@@ -34,7 +34,7 @@ set t 1.0
 
 for {set i 0} {$i < $v} {incr i} {
     set n1($i) [$ns node]
-    set n2($i) [$ns node]
+    # set n2($i) [$ns node]
 }
 
 
@@ -44,46 +44,49 @@ for {set j 1} {$j < $v} {incr j} {
         for {set k 0} {$k < $v} {incr k} {
             if { $k != $j} {
 
-                $ns duplex-link $n1($k) $n1($j) 4Mb 15ms RED
-                $ns queue-limit $n1($k) $n1($j) 5
-                $ns queue-limit $n1($j) $n1($k) 5
-
-                set tcpa($j) [new Agent/TCP]
-                $tcpa($j) set class_ 2
-                $ns attach-agent $n1($j) $tcpa($j)
-
-                set sinka($j) [new Agent/TCPSink]
-                $ns attach-agent $n1($k) $sinka($j)
-                $ns connect $tcpa($j) $sinka($j)
-                $tcpa($j) set fid_ 2
-
-                set ftpa($j) [new Application/FTP]
-                $ftpa($j) attach-agent $tcpa($j)
-                $ftpa($j) set type_ FTP
-
-                $ns at 0.0 "$ftpa($j) start"
-                $ns at $t "$ftpa($j) stop"
+                set y [expr ($k+1) % $v]
 
 
+                $ns duplex-link $n1($k) $n1($j) 50Mb 5ms RED
+                # $ns queue-limit $n1($k) $n1($j) 20
+                # $ns queue-limit $n1($j) $n1($k) 20
 
-                set udpa($j) [new Agent/UDP]
-                $ns attach-agent $n1($k) $udpa($j)
+                set tcpa($y) [new Agent/TCP]
+                $tcpa($y) set class_ 2
+                $ns attach-agent $n1($y) $tcpa($y)
 
-                set nulla($j) [new Agent/Null]
-                $ns attach-agent $n1($j) $nulla($j)
+                set sinka($y) [new Agent/TCPSink]
+                $ns attach-agent $n1($k) $sinka($y)
+                $ns connect $tcpa($y) $sinka($y)
+                $tcpa($y) set fid_ 2
 
-                $ns connect $udpa($j) $nulla($j)
-                $udpa($j) set fid_ 1
+                set ftpa($y) [new Application/FTP]
+                $ftpa($y) attach-agent $tcpa($y)
+                $ftpa($y) set type_ FTP
 
-                set cbra($j) [new Application/Traffic/CBR]
-                $cbra($j) attach-agent $udpa($j)
-                $cbra($j) set type_ CBR
-                $cbra($j) set packet_size_ 1000
-                $cbra($j) set rate_ 1mb
-                $cbra($j) set random_ true
+                $ns at 0.0 "$ftpa($y) start"
+                $ns at $t "$ftpa($y) stop"
 
-                $ns at 0.0 "$cbra($j) start"
-                $ns at $t "$cbra($j) stop"
+
+
+                set udpa($y) [new Agent/UDP]
+                $ns attach-agent $n1($k) $udpa($y)
+
+                set nulla($y) [new Agent/Null]
+                $ns attach-agent $n1($y) $nulla($y)
+
+                $ns connect $udpa($y) $nulla($y)
+                $udpa($y) set fid_ 1
+
+                set cbra($y) [new Application/Traffic/CBR]
+                $cbra($y) attach-agent $udpa($y)
+                $cbra($y) set type_ CBR
+                $cbra($y) set packet_size_ 1000
+                $cbra($y) set rate_ 1mb
+                $cbra($y) set random_ true
+
+                $ns at 0.0 "$cbra($y) start"
+                $ns at $t "$cbra($y) stop"
             }
         }
     }
