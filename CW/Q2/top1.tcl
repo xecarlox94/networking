@@ -11,7 +11,7 @@ $ns trace-all $tf
 
 
 
-$ns rtproto LS
+$ns rtproto DV
 
 proc finish {} {
     global ns nf
