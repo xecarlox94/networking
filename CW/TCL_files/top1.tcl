@@ -4,7 +4,7 @@ $ns color 1 red
 $ns color 2 blue
 
 set nf [open top1.nam w]
-set tf [open top1.r w]
+set tf [open top1.tr w]
 
 $ns namtrace-all $nf
 $ns trace-all $tf
