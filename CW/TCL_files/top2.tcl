@@ -29,8 +29,8 @@ proc finish {} {
 # seeting UDP communication
 
 
-set v 25
-set t 1.0
+set v 10
+set t 10.0
 
 for {set i 0} {$i < $v} {incr i} {
     set n1($i) [$ns node]

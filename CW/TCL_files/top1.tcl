@@ -29,8 +29,8 @@ proc finish {} {
 # seeting UDP communication
 
 
-set v 20
-set t 1.0
+set v 10
+set t 10.0
 
 
 
