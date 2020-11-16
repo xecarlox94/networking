@@ -14,11 +14,8 @@ def packet_delivery_ratio(df):
     return amnt_rcvd / amnt_sent
 
 
-
-
 def total_dropped_packet(df):
     return len(df[df['event'] == 'd'])
-
 
 
 def total_lost_packets(df):
@@ -28,7 +25,6 @@ def total_lost_packets(df):
     return amnt_sent - amnt_rcvd
 
 
-
 def throughput(df):
     total_rcvd = df[df['event'] == 'r']['packet_size'].sum()
     total_sent = df[df['event'] == '+']['packet_size'].sum()
@@ -36,3 +32,7 @@ def throughput(df):
     throughput = (total_rcvd / total_sent) * 100
 
     return throughput
+
+
+def routing_overhead(df):
+    return len(df[df['packet_type'] == 'rtProtoDV'])
