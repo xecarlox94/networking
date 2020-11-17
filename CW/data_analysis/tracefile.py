@@ -34,6 +34,9 @@ def plot_dfs(dv_dfs, ls_dfs, fn, title, y_label):
     plt.xlabel("Number of nodes")
 
     ax.legend()
+
+    plt.savefig(title, format='jpeg', transparent=False)
+
     plt.show()
 
 
