@@ -12,22 +12,26 @@ def filter(dfs, fn):
 
 
 # plot distance vector and link state dataframes, according to which function given
-def plot_dfs(dv_dfs, ls_dfs, fn, title):
+def plot_dfs(dv_dfs, ls_dfs, fn, title, y_label):
     x = np.array([5, 10, 15])
     
 
     y1 = filter(dv_dfs, fn)
     y2 = filter(ls_dfs, fn)
 
-    fig, ax = plt.subplots(figsize=(25,10))
+    _, ax = plt.subplots(figsize=(25,10))
 
     plt.xticks(range(1, x[len(x) -1]+1, 1))
 
-    ax.plot(x, y2, label='Distance Vector', marker="D")
+    ax.plot(x, y1, label='Distance Vector', marker="D")
 
-    ax.plot(x, y1, label='Link State', marker="D")
+    ax.plot(x, y2, label='Link State', marker="D")
 
     plt.title(title)
+
+    plt.ylabel(y_label)
+
+    plt.xlabel("Number of nodes")
 
     ax.legend()
     plt.show()
