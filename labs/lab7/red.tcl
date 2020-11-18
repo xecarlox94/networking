@@ -19,13 +19,13 @@ set node_(r2) [$ns node]
 set node_(s3) [$ns node]
 set node_(s4) [$ns node]
 
-$ns duplex-link $node_(s1) $node_(r1) 10Mb 2ms DropTail 
-$ns duplex-link $node_(s2) $node_(r1) 10Mb 3ms DropTail 
-$ns duplex-link $node_(r1) $node_(r2) 1.5Mb 20ms RED 
-$ns queue-limit $node_(r1) $node_(r2) 25
-$ns queue-limit $node_(r2) $node_(r1) 25
-$ns duplex-link $node_(s3) $node_(r2) 10Mb 4ms DropTail 
-$ns duplex-link $node_(s4) $node_(r2) 10Mb 5ms DropTail 
+$ns duplex-link $node_(s1) $node_(r1) 10Mb 1ms DropTail 
+$ns duplex-link $node_(s2) $node_(r1) 10Mb 1ms DropTail 
+$ns duplex-link $node_(r1) $node_(r2) 1.5Mb 10ms RED 
+$ns queue-limit $node_(r1) $node_(r2) 15
+$ns queue-limit $node_(r2) $node_(r1) 15
+$ns duplex-link $node_(s3) $node_(r2) 10Mb 2ms DropTail 
+$ns duplex-link $node_(s4) $node_(r2) 10Mb 2ms DropTail 
 
 $ns duplex-link-op $node_(s1) $node_(r1) orient right-down
 $ns duplex-link-op $node_(s2) $node_(r1) orient right-up
