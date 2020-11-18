@@ -1,7 +1,7 @@
-set ns [new Simulator]
+remove-all-packet-headers;            # removes all packet headers
+add-packet-header IP TCP;             # adds TCP/IP headers
 
-$ns color 1 red
-$ns color 2 blue
+set ns [new Simulator]
 
 set nf [open top1.nam w]
 set tf [open top1.tr w]
@@ -12,6 +12,11 @@ $ns trace-all $tf
 
 
 $ns rtproto DV
+
+
+
+$ns color 1 red
+$ns color 2 blue
 
 proc finish {} {
     global ns nf

@@ -43,7 +43,7 @@ def plot_dfs(dv_dfs, ls_dfs, fn, title, y_label):
 
 # read tr file and return a pandas data frame
 def get_df(filename):
-    df = pd.read_csv(filename, sep=" ", names=["event", "time", "src_node", "dst_node", "packet_type", "packet_size", "delete" ,"flags", "fragment_id", "src_address", "dst_address", "seq_number", "packet_id"])
+    df = pd.read_csv(filename, sep=" ", names=["event", "time", "src_node", "dst_node", "packet_type", "packet_size", "delete" ,"flags", "src_address", "dst_address", "seq_number", "packet_id"])
 
     return df.drop([df.columns[6]], axis=1)
 
