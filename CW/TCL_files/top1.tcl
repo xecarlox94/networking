@@ -9,7 +9,7 @@ $ns trace-all $tf
 
 
 
-$ns rtproto DV
+$ns rtproto LS
 
 
 
@@ -37,7 +37,7 @@ Agent/Ping instproc recv {from rtt} {
 
 
 set v 20
-set t 100.0
+set t 1.0
 
 
 
