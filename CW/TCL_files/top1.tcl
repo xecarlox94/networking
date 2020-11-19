@@ -50,10 +50,11 @@ for {set i 0} {$i < $v} {incr i} {
 for {set j 1} {$j < $v} {incr j} {
 
     # network 1
-    $ns duplex-link $n1(0) $n1($j) 5Mb 1ms RED
+    $ns duplex-link $n1(0) $n1($j) 10Mb 1ms RED
 
     set tcpa($j) [new Agent/TCP]
     $tcpa($j) set class_ 2
+    $tcpa($j) set window_ 3
     $ns attach-agent $n1($j) $tcpa($j)
 
     set sinka($j) [new Agent/TCPSink]
@@ -83,7 +84,7 @@ for {set j 1} {$j < $v} {incr j} {
     $cbra($j) attach-agent $udpa($j)
     $cbra($j) set type_ CBR
     $cbra($j) set packet_size_ 1000
-    $cbra($j) set rate_ 0.5mb
+    $cbra($j) set rate_ 0.1mb
     $cbra($j) set random_ true
 
     $ns at 0.0 "$cbra($j) start"
@@ -91,10 +92,11 @@ for {set j 1} {$j < $v} {incr j} {
 
 
     # network 2
-    $ns duplex-link $n2(0) $n2($j) 5Mb 1ms RED
+    $ns duplex-link $n2(0) $n2($j) 10Mb 1ms RED
 
     set tcpb($j) [new Agent/TCP]
     $tcpb($j) set class_ 2
+    $tcpb($j) set window_ 3
     $ns attach-agent $n2($j) $tcpb($j)
 
     set sinkb($j) [new Agent/TCPSink]
@@ -124,17 +126,18 @@ for {set j 1} {$j < $v} {incr j} {
     $cbrb($j) attach-agent $udpb($j)
     $cbrb($j) set type_ CBR
     $cbrb($j) set packet_size_ 1000
-    $cbrb($j) set rate_ 0.5mb
+    $cbrb($j) set rate_ 0.1mb
     $cbrb($j) set random_ true
 
     $ns at 0.0 "$cbrb($j) start"
     $ns at $t "$cbrb($j) stop"
 
     # network 3
-    $ns duplex-link $n3(0) $n3($j) 5Mb 1ms RED
+    $ns duplex-link $n3(0) $n3($j) 10Mb 1ms RED
 
     set tcpc($j) [new Agent/TCP]
     $tcpc($j) set class_ 2
+    $tcpc($j) set window_ 3
     $ns attach-agent $n3($j) $tcpc($j)
 
     set sinkc($j) [new Agent/TCPSink]
@@ -164,7 +167,7 @@ for {set j 1} {$j < $v} {incr j} {
     $cbrc($j) attach-agent $udpc($j)
     $cbrc($j) set type_ CBR
     $cbrc($j) set packet_size_ 1000
-    $cbrc($j) set rate_ 0.5mb
+    $cbrc($j) set rate_ 0.1mb
     $cbrc($j) set random_ true
 
     $ns at 0.0 "$cbrc($j) start"

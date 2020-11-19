@@ -34,7 +34,7 @@ Agent/Ping instproc recv {from rtt} {
 }
 
 
-set v 30
+set v 25
 set t 100.0
 
 for {set i 0} {$i < $v} {incr i} {
@@ -68,6 +68,7 @@ for {set j 1} {$j < $v} {incr j} {
     # network 1
     set tcpa($y) [new Agent/TCP]
     $tcpa($y) set class_ 2
+    $tcpa($y) set window_ 3
     $ns attach-agent $n1($y) $tcpa($y)
 
     set sinka($y) [new Agent/TCPSink]
@@ -96,7 +97,7 @@ for {set j 1} {$j < $v} {incr j} {
     $cbra($y) attach-agent $udpa($y)
     $cbra($y) set type_ CBR
     $cbra($y) set packet_size_ 1000
-    $cbra($y) set rate_ 1mb
+    $cbra($y) set rate_ 0.1mb
     $cbra($y) set random_ true
 
     $ns at 0.0 "$cbra($y) start"
@@ -106,6 +107,7 @@ for {set j 1} {$j < $v} {incr j} {
     # network 2
     set tcpb($y) [new Agent/TCP]
     $tcpb($y) set class_ 2
+    $tcpb($y) set window_ 3
     $ns attach-agent $n2($y) $tcpb($y)
 
     set sinkb($y) [new Agent/TCPSink]
@@ -134,7 +136,7 @@ for {set j 1} {$j < $v} {incr j} {
     $cbrb($y) attach-agent $udpb($y)
     $cbrb($y) set type_ CBR
     $cbrb($y) set packet_size_ 1000
-    $cbrb($y) set rate_ 1mb
+    $cbrb($y) set rate_ 0.1mb
     $cbrb($y) set random_ true
 
     $ns at 0.0 "$cbrb($y) start"
