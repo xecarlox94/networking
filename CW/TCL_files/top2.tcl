@@ -26,11 +26,16 @@ proc finish {} {
 }
 
 
-# seeting UDP communication
+
+# round trip time function
+Agent/Ping instproc recv {from rtt} {
+    $self instvar node_
+    puts "Round Trip Time ($rtt ms): from node $from to node [$node_ id]"
+}
 
 
-set v 10
-set t 10.0
+set v 30
+set t 100.0
 
 for {set i 0} {$i < $v} {incr i} {
     set n1($i) [$ns node]
@@ -44,13 +49,13 @@ for {set i 0} {$i < $v} {incr i} {
 
         if { $k != $i && $i % 3 == 0} {
 
-            $ns duplex-link $n1($k) $n1($i) 1Mb 5ms RED
-            $ns queue-limit $n1($k) $n1($i) 10
-            $ns queue-limit $n1($i) $n1($k) 10
+            $ns duplex-link $n1($k) $n1($i) 5Mb 2ms RED
+            $ns queue-limit $n1($k) $n1($i) 15
+            $ns queue-limit $n1($i) $n1($k) 15
 
-            $ns duplex-link $n2($k) $n2($i) 1Mb 5ms RED
-            $ns queue-limit $n2($k) $n2($i) 10
-            $ns queue-limit $n2($i) $n2($k) 10
+            $ns duplex-link $n2($k) $n2($i) 5Mb 2ms RED
+            $ns queue-limit $n2($k) $n2($i) 15
+            $ns queue-limit $n2($i) $n2($k) 15
         }
     }
 }
@@ -83,7 +88,7 @@ for {set j 1} {$j < $v} {incr j} {
     $ns attach-agent $n1($j) $udpa($y)
 
     set nulla($y) [new Agent/Null]
-    $ns attach-agent $n1($y) $nulla($y)
+    $ns attach-agent $n2($y) $nulla($y)
     $ns connect $udpa($y) $nulla($y)
     $udpa($y) set fid_ 1
 
@@ -121,7 +126,7 @@ for {set j 1} {$j < $v} {incr j} {
     $ns attach-agent $n2($j) $udpb($y)
 
     set nullb($y) [new Agent/Null]
-    $ns attach-agent $n2($y) $nullb($y)
+    $ns attach-agent $n1($y) $nullb($y)
     $ns connect $udpb($y) $nullb($y)
     $udpb($y) set fid_ 1
 
@@ -140,43 +145,23 @@ for {set j 1} {$j < $v} {incr j} {
 
 
 
-$ns duplex-link $n1(0) $n2(0) 1Mb 5ms RED
-
-set tcpr [new Agent/TCP]
-$tcpr set class_ 2
-$ns attach-agent $n1(0) $tcpr
-
-set sinkr [new Agent/TCPSink]
-$ns attach-agent $n2(0) $sinkr
-$ns connect $tcpr $sinkr
-$tcpr set fid_ 2
-
-set ftpr [new Application/FTP]
-$ftpr attach-agent $tcpr
-$ftpr set type_ FTP
-
-$ns at 0.0 "$ftpr start"
-$ns at $t "$ftpr stop"
+$ns duplex-link $n1(0) $n2(0) 20Mb 5ms RED
+$ns queue-limit $n1(0) $n2(0) 50
+$ns queue-limit $n2(0) $n1(0) 50
 
 
 
-set udpr [new Agent/UDP]
-$ns attach-agent $n2(0) $udpr
 
-set nullr [new Agent/Null]
-$ns attach-agent $n1(0) $nullr
-$ns connect $udpr $nullr
-$udpr set fid_ 1
+set p0 [new Agent/Ping]
+$ns attach-agent $n1(1) $p0
 
-set cbrr [new Application/Traffic/CBR]
-$cbrr attach-agent $udpr
-$cbrr set type_ CBR
-$cbrr set packet_size_ 1000
-$cbrr set rate_ 1mb
-$cbrr set random_ true
+set p1 [new Agent/Ping]
+$ns attach-agent $n2(1) $p1
 
-$ns at 0.0 "$cbrr start"
-$ns at $t "$cbrr stop"
+$ns connect $p0 $p1
+
+$ns at 0.5 "$p0 send"
+$ns at 0.5 "$p1 send"
 
 
 $ns at $t "finish"
