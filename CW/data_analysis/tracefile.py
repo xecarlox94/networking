@@ -13,7 +13,7 @@ def filter(dfs, fn):
 
 # plot distance vector and link state dataframes, according to which function given
 def plot_dfs(dv_dfs, ls_dfs, fn, title, y_label):
-    x = np.array([5, 10, 15])
+    x = np.array([20, 100, 180])
     
 
     y1 = filter(dv_dfs, fn)
@@ -21,7 +21,7 @@ def plot_dfs(dv_dfs, ls_dfs, fn, title, y_label):
 
     _, ax = plt.subplots(figsize=(25,10))
 
-    plt.xticks(range(1, x[len(x) -1]+1, 1))
+    plt.xticks(range(0, x[len(x) -1]+20, 20))
 
     ax.plot(x, y1, label='Distance Vector', marker="D")
 
