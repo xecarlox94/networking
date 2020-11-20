@@ -18,9 +18,7 @@ def plot_dfs(dv_dfs, ls_dfs, fn, title, y_label):
 
     y1 = filter(dv_dfs, fn)
     y2 = filter(ls_dfs, fn)
-
-    print("y1: ", y1)
-    print("y2: ", y2)
+    
 
     _, ax = plt.subplots(figsize=(25,10))
 

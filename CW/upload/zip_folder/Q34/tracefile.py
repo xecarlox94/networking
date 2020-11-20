@@ -18,6 +18,7 @@ def plot_dfs(dv_dfs, ls_dfs, fn, title, y_label):
 
     y1 = filter(dv_dfs, fn)
     y2 = filter(ls_dfs, fn)
+    
 
     _, ax = plt.subplots(figsize=(25,10))
 
@@ -76,4 +77,10 @@ def throughput(df):
 
 # calculating network routing overhead
 def routing_overhead(df):
-    return len(df[df['packet_type'] == 'rtProtoDV'])
+    dv_overhead = len(df[df['packet_type'] == 'rtProtoDV'])
+    ls_overhead = len(df[df['packet_type'] == 'rtProtoLS'])
+
+    if dv_overhead > ls_overhead:
+        return dv_overhead
+    else:
+        return ls_overhead
