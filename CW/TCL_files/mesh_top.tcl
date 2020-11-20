@@ -34,7 +34,7 @@ Agent/Ping instproc recv {from rtt} {
 }
 
 
-set v 25
+set v 50
 set t 100.0
 
 for {set i 0} {$i < $v} {incr i} {

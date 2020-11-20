@@ -36,7 +36,7 @@ Agent/Ping instproc recv {from rtt} {
 }
 
 
-set v 20
+set v 50
 set t 100.0
 
 
