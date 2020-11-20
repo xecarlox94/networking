@@ -1,8 +1,8 @@
 
 set ns [new Simulator]
 
-set nf [open top1.nam w]
-set tf [open top1.tr w]
+set nf [open star_subnet_top.nam w]
+set tf [open star_subnet_top.tr w]
 
 $ns namtrace-all $nf
 $ns trace-all $tf
@@ -23,7 +23,7 @@ proc finish {} {
 
     close $nf
 
-    exec nam top1.nam &
+    exec nam star_subnet_top.nam &
 
     exit 0
 }
@@ -46,6 +46,11 @@ for {set i 0} {$i < $v} {incr i} {
     set n2($i) [$ns node]
     set n3($i) [$ns node]
 }
+
+
+$n1(0) shape square
+$n2(0) shape square
+$n3(0) shape square
 
 for {set j 1} {$j < $v} {incr j} {
 
@@ -178,6 +183,9 @@ for {set j 1} {$j < $v} {incr j} {
 
 
 set router [$ns node]
+
+$router shape square
+
 
 $ns duplex-link $router $n1(0) 10Mb 1ms RED
 $ns queue-limit $router $n1(0) 15
